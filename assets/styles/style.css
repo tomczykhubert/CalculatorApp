@@ -1,6 +1,7 @@
 body {
   display: flex;
   justify-content: center;
+  background-color: rgb(100, 100, 100);
 }
 
 .calculator-container {
@@ -57,4 +58,9 @@ body {
 .delete-icon {
   height: 20px;
   filter: invert();
+}
+
+#button-equal {
+  background-color: rgb(200, 200, 0);
+  color: black;
 }

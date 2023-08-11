@@ -1,15 +1,15 @@
 const defaultResult = "0";
 var inputSavedToVariable = true;
 var currentOutput = "0";
+var result = 0;
 var firstNumber;
 var secondNumber;
-var result = 0;
 var operation;
 var negative = false;
-firstCalculation = true;
+var firstCalculation = true;
 
 function roundResult() {
-  result = Math.round(result * Math.pow(10, 15)) / Math.pow(10, 15);
+  result = Math.round(result * Math.pow(10, 14)) / Math.pow(10, 14);
 }
 
 function deleteSpaces() {
@@ -33,30 +33,40 @@ function makeNegative() {
 function formatResult() {
   deleteSpaces();
   checkNegative();
-  if (currentOutput.length >= 10) {
-    currentOutput =
-      currentOutput.slice(0, -9) +
-      " " +
-      currentOutput.slice(-9, -6) +
-      " " +
-      currentOutput.slice(-6, -3) +
-      " " +
-      currentOutput.slice(-3);
-  } else if (currentOutput.length >= 7) {
-    currentOutput =
-      currentOutput.slice(0, -6) +
-      " " +
-      currentOutput.slice(-6, -3) +
-      " " +
-      currentOutput.slice(-3);
-  } else if (currentOutput.length > 3) {
-    currentOutput = currentOutput.slice(0, -3) + " " + currentOutput.slice(-3);
+  var integer = "";
+  var decimalPart = "";
+  var index = currentOutput.indexOf(".");
+  if (index != -1) {
+    integer = currentOutput.slice(0, index);
+    decimalPart = currentOutput.slice(index);
+  } else {
+    integer = currentOutput;
   }
+  if (integer.length >= 10) {
+    integer =
+      integer.slice(0, -9) +
+      " " +
+      integer.slice(-9, -6) +
+      " " +
+      integer.slice(-6, -3) +
+      " " +
+      integer.slice(-3);
+  } else if (integer.length >= 7) {
+    integer =
+      integer.slice(0, -6) +
+      " " +
+      integer.slice(-6, -3) +
+      " " +
+      integer.slice(-3);
+  } else if (integer.length > 3) {
+    integer = integer.slice(0, -3) + " " + integer.slice(-3);
+  }
+  currentOutput = integer + decimalPart;
   makeNegative();
 }
 
 function input(number) {
-  checkNegative();
+  if (!inputSavedToVariable) checkNegative();
   if (inputSavedToVariable || currentOutput == "0") {
     currentOutput = number;
     inputSavedToVariable = false;
@@ -65,7 +75,7 @@ function input(number) {
     currentOutput += number;
     formatResult();
   }
-  makeNegative();
+  if (!inputSavedToVariable) makeNegative();
   outputResult(currentOutput);
 }
 
@@ -126,15 +136,18 @@ function clearAll() {
   result = null;
   negative = false;
   inputSavedToVariable = true;
+  firstCalculation = true;
   outputResult(currentOutput);
 }
 
 function plusMinus() {
+  var negative;
   deleteSpaces();
-  firstNumber = parseFloat(currentOutput);
-  firstNumber *= -1;
-  currentOutput = firstNumber.toString();
+  negative = parseFloat(currentOutput);
+  negative *= -1;
+  currentOutput = negative.toString();
   formatResult();
+  console.log(firstNumber, secondNumber);
   outputResult(currentOutput);
 }
 
@@ -193,6 +206,7 @@ function equal() {
   }
   roundResult();
   firstNumber = result;
+  if (operation == undefined) result = currentOutput;
   currentOutput = result.toString();
   firstCalculation = false;
   formatResult();
